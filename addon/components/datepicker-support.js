@@ -43,14 +43,13 @@ export default Ember.Mixin.create({
     var isoDate = null;
 
     if (event.date) {
-      var value = this.get('value');
-      if (Ember.isArray(value)) {
+      if (Ember.isArray(this.get('value'))) {
          // set value to array if multidate
          isoDate = this.$().datepicker('getUTCDates').map(function(date) {
            return date.toISOString();
          });
-      } else if (Ember.isPresent(value)) {
-         isoDate = this.$().datepicker('getUTCDate').toISOString();
+      } else {
+        isoDate = this.$().datepicker('getUTCDate').toISOString();
       }
     }
 
