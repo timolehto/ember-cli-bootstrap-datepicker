@@ -5,9 +5,7 @@ export default Ember.Mixin.create({
 
   setupBootstrapDatepicker: function() {
     var self = this,
-        element = this.$(),
-        value = this.get('value'),
-        dates = [];
+        element = this.$();
 
     element.
       datepicker({
@@ -21,8 +19,6 @@ export default Ember.Mixin.create({
         keyboardNavigation: this.get('keyboardNavigation'),
         language: this.get('language'),
         minViewMode: this.get('minViewMode'),
-        multidate: this.get('multidate'),
-        multidateSeparator: this.get('multidateSeparator'),
         orientation: this.get('orientation'),
         startDate: this.get('startDate'),
         startView: this.get('startView'),
@@ -36,23 +32,7 @@ export default Ember.Mixin.create({
         });
       });
 
-    if (value) {
-      if (this.get('multidate')) {
-        // split datesIsoString by multidate separator
-        var multidateSeparator = this.get('multidateSeparator') || ',';
-        var isoDates = value.split(multidateSeparator);
-
-        // generate array of date objecs
-        dates = isoDates.map(function(date) {
-          return self._resetTime(new Date(date));
-        });
-      }
-      else {
-        dates = [self._resetTime(new Date(value))];
-      }
-      element.datepicker.
-              apply(element, Array.prototype.concat.call(['update'], dates));
-    }
+    this.didChangeValue();
   }.on('didInsertElement'),
 
   teardownBootstrapDatepicker: function() {
@@ -63,13 +43,13 @@ export default Ember.Mixin.create({
     var isoDate = null;
 
     if (event.date) {
-      if (this.get('multidate')) {
+      var value = this.get('value');
+      if (Ember.isArray(value)) {
          // set value to array if multidate
          isoDate = this.$().datepicker('getUTCDates').map(function(date) {
            return date.toISOString();
          });
-      }
-      else {
+      } else if (Ember.isPresent(value)) {
          isoDate = this.$().datepicker('getUTCDate').toISOString();
       }
     }
@@ -87,7 +67,9 @@ export default Ember.Mixin.create({
       dates = value.map(function(date) {
         return self._resetTime(new Date(date));
       });
-    } else {
+    } else if (Ember.isPresent(value)) {
+      //var date = new Date(value);
+      //if (date.toString() === 'Invalid Date') ...
       dates = [self._resetTime(new Date(value))];
     }
 

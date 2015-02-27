@@ -41,27 +41,13 @@ test('should display date with custom format when format is set', function(){
   equal(this.$().val(), '31.Dec.14');
 });
 
-test('should set dates provided by value (multidate, default multidateSeparator)', function(){
+test('should set dates provided by value (multidate as an array of dates)', function(){
   expect(2);
   
   var component = this.subject({
-    value: '2015-01-13T00:00:00.000Z,2015-01-07T00:00:00.000Z,2015-01-15T00:00:00.000Z',
-    multidate: true
+    value: ['2015-01-13T00:00:00.000Z', '2015-01-07T00:00:00.000Z', '2015-01-15T00:00:00.000Z']
   });
 
   equal(this.$().val(), '01/13/2015,01/07/2015,01/15/2015', 'should set value as input field value');
-  equal(this.$().datepicker('getDates').length, 3, 'should set internal datepicker dates by value');
-});
-
-test('should set dates provided by value (multidate, multidateSeparator provided)', function(){
-  expect(2);
-
-  var component = this.subject({
-    value: '2015-01-13T00:00:00.000Z;2015-01-07T00:00:00.000Z;2015-01-15T00:00:00.000Z',
-    multidate: true,
-    multidateSeparator: ';'
-  });
-
-  equal(this.$().val(), '01/13/2015;01/07/2015;01/15/2015', 'should set value as input field value using multidate separator');
   equal(this.$().datepicker('getDates').length, 3, 'should set internal datepicker dates by value');
 });
