@@ -67,8 +67,6 @@ export default Ember.Mixin.create({
         return self._resetTime(new Date(date));
       });
     } else if (Ember.isPresent(value)) {
-      //var date = new Date(value);
-      //if (date.toString() === 'Invalid Date') ...
       dates = [self._resetTime(new Date(value))];
     }
 
